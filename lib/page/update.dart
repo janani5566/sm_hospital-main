@@ -66,6 +66,20 @@ var ipno = TextEditingController();
 
 var perid = TextEditingController();
 
+ List<Map<String, dynamic>> _data = [];
+
+  Future<List<dynamic>> fetchData() async {
+     String baseUrl = "http://127.0.0.1:8000/ip/";
+
+     var response = await http.get(Uri.parse(baseUrl),  headers: {
+          "Accept": "application/json",
+          "Access-Control_Allow_Origin": "*"
+        },
+        );
+    final data = jsonDecode(response.body);
+    return data;
+  }
+
 
 
   void showMessage(BuildContext context, String message) {
@@ -208,7 +222,7 @@ final _formKey = GlobalKey<FormState>();
               child: Center(
 
                child: Text(
-                   'New Admission', style: GoogleFonts.crimsonText(color: Colors.white, fontSize: 30 ,fontWeight:  FontWeight.w800, ),textAlign: TextAlign.center,),
+                   'Update Admission', style: GoogleFonts.crimsonText(color: Colors.white, fontSize: 30 ,fontWeight:  FontWeight.w800, ),textAlign: TextAlign.center,),
                   ),
             ),
                   ),
@@ -222,7 +236,7 @@ final _formKey = GlobalKey<FormState>();
               child: Center(
               child: FittedBox(
                child: Text(
-                   'New Admission', style: GoogleFonts.crimsonText(color: Colors.white, fontSize: 30 ,fontWeight:  FontWeight.w800, ),textAlign: TextAlign.center,),
+                   'Update Admission', style: GoogleFonts.crimsonText(color: Colors.white, fontSize: 25 ,fontWeight:  FontWeight.w800, ),textAlign: TextAlign.center,),
               ),
 
                   ),
@@ -676,8 +690,32 @@ final _formKey = GlobalKey<FormState>();
                                 child: OutlinedButton(
                                      onPressed: (){
                                       updateData();
-                                      Navigator.push(context, MaterialPageRoute( builder: (context) => TodayIp(),  ));
-                                     },
+                                     Navigator.pushReplacement( context,  MaterialPageRoute(builder: (BuildContext context) => TodayIp()),          );
+                                  showDialog(context: context,
+                   builder: (context) {
+                return Container(
+               child: AlertDialog(
+              title: Text('Successfully Updated..!!',  style: GoogleFonts.crimsonText(color: Colors.white, fontSize: 17 ,fontWeight:  FontWeight.w800,)),
+              icon: Icon(Icons.check_circle,color: Colors.green),
+              backgroundColor:  Color.fromARGB(255, 48, 22, 97),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                   backgroundColor: Colors.green
+                    ),
+                  onPressed: (){
+            Navigator.pop(context);
+                  },
+                  child: Text('OK')),
+                )
+              ],
+            ),
+                    );
+                   }
+                   );
+                         },
                                     child: Text('Update',style:  GoogleFonts.crimsonText(color: Colors.white,fontSize: 15.0,fontWeight: FontWeight.w800),),
                                      style: OutlinedButton.styleFrom(
                                     backgroundColor: Color.fromARGB(255, 48, 22, 97),
@@ -747,21 +785,7 @@ final _formKey = GlobalKey<FormState>();
       body: jsonEncode(data));
 
   if (response.statusCode == 200) {
- ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Data Updated Successfully!.'),
-        duration: Duration(seconds: 3),
-        backgroundColor:  Color.fromARGB(255, 48, 22, 97), // Set the background color
-        behavior: SnackBarBehavior.floating, // Set the behavior
-        shape: RoundedRectangleBorder( // Set the border shape
-        borderRadius: BorderRadius.circular(8.0),
-        ),
-        action: SnackBarAction( // Set an action button
-          label: 'OK',
-          onPressed: () {},
-        ),
-      ),
-    );
+
   } else {
      ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
