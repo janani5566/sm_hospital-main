@@ -691,7 +691,7 @@ final _formKey = GlobalKey<FormState>();
                                      onPressed: (){
                                       updateData();
                                      Navigator.pushReplacement( context,  MaterialPageRoute(builder: (BuildContext context) => TodayIp()),          );
-                                  showDialog(context: context,
+                                /*  showDialog(context: context,
                    builder: (context) {
                 return Container(
                child: AlertDialog(
@@ -714,7 +714,7 @@ final _formKey = GlobalKey<FormState>();
             ),
                     );
                    }
-                   );
+                   );*/
                          },
                                     child: Text('Update',style:  GoogleFonts.crimsonText(color: Colors.white,fontSize: 15.0,fontWeight: FontWeight.w800),),
                                      style: OutlinedButton.styleFrom(
@@ -784,25 +784,57 @@ final _formKey = GlobalKey<FormState>();
       },
       body: jsonEncode(data));
 
-  if (response.statusCode == 200) {
-
-  } else {
-     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Failed to update!.'),
-        duration: Duration(seconds: 3),
-        backgroundColor:  Colors.red, // Set the background color
-        behavior: SnackBarBehavior.floating, // Set the behavior
-        shape: RoundedRectangleBorder( // Set the border shape
-        borderRadius: BorderRadius.circular(8.0),
-        ),
-        action: SnackBarAction( // Set an action button
-          label: 'OK',
-          onPressed: () {},
-        ),
-      ),
-    );
-
+if (response.statusCode == 200) {
+  // ignore: use_build_context_synchronously
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return  AlertDialog(
+              title: Text('Successfully Updated..!!',  style: GoogleFonts.crimsonText(color: Colors.white, fontSize: 17 ,fontWeight:  FontWeight.w800,)),
+              icon: const Icon(Icons.check_circle,color: Colors.green),
+              backgroundColor: const Color.fromARGB(255, 48, 22, 97),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                   backgroundColor: Colors.green
+                    ),
+                  onPressed: (){
+            Navigator.pop(context);
+                  },
+                  child:const Text('OK')),
+                )
+              ],
+            );
+    },
+  );
+}
+   else {
+   // ignore: use_build_context_synchronously
+   showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return  AlertDialog(
+              title: Text('Failed to Updated..!!',  style: GoogleFonts.crimsonText(color: Colors.white, fontSize: 17 ,fontWeight:  FontWeight.w800,)),
+              icon: const Icon(Icons.clear,color: Colors.red),
+              backgroundColor: const Color.fromARGB(255, 48, 22, 97),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                   backgroundColor: Colors.red
+                    ),
+                  onPressed: (){
+            Navigator.pop(context);
+                  },
+                  child:const Text('OK')),
+                )
+              ],
+            );
+    },
+  );
   }
 }
 
